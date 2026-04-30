@@ -642,7 +642,7 @@ static void workerMain(HWND hWnd) {
             { std::lock_guard<std::mutex> lk(g_failMtx); g_failures.push_back(entry); }
             PostMessage(hWnd, WM_VAL_FAILURE, 0, (LPARAM)_wcsdup(entry.c_str()));
         }
-        };
+    };
 
     int n = std::min(g_nThreads, (int)g_total);
     std::vector<std::thread> threads;
@@ -683,8 +683,7 @@ static void refreshStats() {
     if (d > 0 && d < g_total) {
         double rem = elapsed * (g_total - d) / d;
         SetWindowText(g_hEtaLbl, (L"ETA:  " + fmtTime((int)rem)).c_str());
-    }
-    else if (d >= g_total) {
+    } else if (d >= g_total) {
         SetWindowText(g_hEtaLbl, L"ETA:  00:00:00");
     } else {
         SetWindowText(g_hEtaLbl, L"ETA:  --:--:--");
@@ -869,23 +868,23 @@ static void onTaskbarButtonCreated() {
 
 static void onCommand(HWND hWnd, WPARAM wParam) {
     switch (LOWORD(wParam)) {
-    case ID_BROWSE_BTN:    
-        doBrowse(hWnd); 
-        break;
-    case ID_START_BTN:     
-        doStart();      
-        break;
-    case ID_CANCEL_BTN:    
-        doCancel();     
-        break;
-    case ID_EXPORT_BTN:    
-        doExport();     
-        break;
-    case ID_THREADS_COMBO:
-        if (HIWORD(wParam) == CBN_SELCHANGE)
-            onThreadsChanged();
+        case ID_BROWSE_BTN:    
+            doBrowse(hWnd); 
+            break;
+        case ID_START_BTN:     
+            doStart();      
+            break;
+        case ID_CANCEL_BTN:    
+            doCancel();     
+            break;
+        case ID_EXPORT_BTN:    
+            doExport();     
+            break;
+        case ID_THREADS_COMBO:
+            if (HIWORD(wParam) == CBN_SELCHANGE)
+                onThreadsChanged();
 
-        break;
+            break;
     }
 }
 
@@ -971,6 +970,7 @@ static LRESULT onClose(HWND hWnd) {
         if (CenteredMessageBox(hWnd, L"Validation in progress. Cancel and exit?",
             L"FLAC Validator", MB_YESNO | MB_ICONQUESTION) != IDYES)
             return 0;
+
         g_cancel = true;
     }
 

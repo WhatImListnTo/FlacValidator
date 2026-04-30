@@ -90,6 +90,7 @@ static FLAC__StreamDecoderSeekStatus flac_seek_cb(
 
     if (_fseeki64(ctx->file, (long long)absolute_byte_offset, SEEK_SET) < 0)
         return FLAC__STREAM_DECODER_SEEK_STATUS_ERROR;
+
     return FLAC__STREAM_DECODER_SEEK_STATUS_OK;
 }
 
@@ -403,15 +404,12 @@ int main(int argc, char* argv[]) {
         if ((a == L"-t" || a == L"--threads") && i + 1 < args.size()) {
             threads = (unsigned)std::stoi(wideToUtf8(args[++i]));
             threadsSet = true;
-        }
-        else if ((a == L"-l" || a == L"--log") && i + 1 < args.size()) {
+        } else if ((a == L"-l" || a == L"--log") && i + 1 < args.size()) {
             logPath = wideToUtf8(args[++i]);
-        }
-        else if (a == L"-h" || a == L"--help") {
+        } else if (a == L"-h" || a == L"--help") {
             puts("Usage: FlacValidator [path] [--threads N] [--log file.log]");
             return 0;
-        }
-        else {
+        } else {
             root = args[i];   // fs::path from wide string preserves Unicode
             pathSet = true;
         }
