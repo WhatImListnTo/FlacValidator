@@ -149,6 +149,7 @@ static LRESULT CALLBACK MsgBoxCBTProc(int nCode, WPARAM wParam, LPARAM lParam) {
             SetWindowPos(hMsgBox, nullptr, x, y, 0, 0,
                 SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
+
         UnhookWindowsHookEx(g_hMsgBoxHook);
         g_hMsgBoxHook = nullptr;
     }
@@ -244,7 +245,9 @@ static std::wstring fmtSpeed(double bps) {
 // ============================================================================
 static void CopyListboxItemToClipboard(HWND hList, int index) {
     int len = (int)SendMessage(hList, LB_GETTEXTLEN, index, 0);
-    if (len <= 0) return;
+    
+    if (len <= 0) 
+        return;
 
     std::wstring text(len, L'\0');
     SendMessage(hList, LB_GETTEXT, index, (LPARAM)text.data());
@@ -266,7 +269,9 @@ static void CopyListboxItemToClipboard(HWND hList, int index) {
 
 static void CopyAllListboxItemsToClipboard(HWND hList) {
     int count = (int)SendMessage(hList, LB_GETCOUNT, 0, 0);
-    if (count <= 0) return;
+    
+    if (count <= 0) 
+        return;
 
     std::wstring all;
 
@@ -475,14 +480,19 @@ static FLAC__StreamDecoderLengthStatus flacLengthCb(
     FLAC__uint64* stream_length, void* client_data) {
     auto* ctx = static_cast<FlacCtx*>(client_data);
     long long cur = _ftelli64(ctx->file);
+
     if (cur < 0)
         return FLAC__STREAM_DECODER_LENGTH_STATUS_ERROR;
+
     if (_fseeki64(ctx->file, 0, SEEK_END) < 0)
         return FLAC__STREAM_DECODER_LENGTH_STATUS_ERROR;
+
     long long end = _ftelli64(ctx->file);
     _fseeki64(ctx->file, cur, SEEK_SET);
+
     if (end < 0)
         return FLAC__STREAM_DECODER_LENGTH_STATUS_ERROR;
+
     *stream_length = (FLAC__uint64)end;
     return FLAC__STREAM_DECODER_LENGTH_STATUS_OK;
 }
@@ -514,7 +524,10 @@ static bool validateFile(const std::wstring& path, std::wstring& reasonOut) {
     FlacCtx ctx;
 
     FLAC__StreamDecoder* dec = FLAC__stream_decoder_new();
-    if (!dec) { reasonOut = L"decoder alloc failed"; return false; }
+    
+    if (!dec) { 
+        reasonOut = L"decoder alloc failed"; return false; 
+    }
 
     FLAC__stream_decoder_set_md5_checking(dec, true);
 

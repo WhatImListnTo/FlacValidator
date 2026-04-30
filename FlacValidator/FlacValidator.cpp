@@ -306,8 +306,7 @@ static std::string getDefaultLogPath() {
 // ================================================================
 //  Worker Thread
 // ================================================================
-static void worker_thread()
-{
+static void worker_thread() {
     try {
         while (true) {
             size_t i = g_nextIdx.fetch_add(1, std::memory_order_relaxed);
@@ -316,8 +315,10 @@ static void worker_thread()
                 break;
 
             uint64_t sz = 0;
-            try { sz = fs::file_size(g_files[i]); }
-            catch (...) {}
+
+            try { 
+                sz = fs::file_size(g_files[i]); 
+            } catch (...) {}
 
             std::string err;
             bool ok = validate_flac(g_files[i], err);
@@ -349,8 +350,7 @@ static void worker_thread()
 // ================================================================
 //  Progress Reporter Thread
 // ================================================================
-static void progress_thread(std::chrono::steady_clock::time_point t0)
-{
+static void progress_thread(std::chrono::steady_clock::time_point t0) {
     while (!g_done.load(std::memory_order_relaxed)) {
         std::this_thread::sleep_for(std::chrono::seconds(2));
 
